@@ -2,6 +2,10 @@
 
 # LegacyChatConverter Changelog
 
-## v0.1.0
+## [Unreleased]
 ### Added
 - Initial Release
+
+## [0.0.1]
+### Added
+- Initial Template copy
