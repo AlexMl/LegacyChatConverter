@@ -1,10 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.alexml.legacychatconverter</id>
+    <id>de.aubli.legacychatconverter</id>
     <name>LegacyChatConverter</name>
-    <vendor>alexml</vendor>
+    <vendor>AlexMl</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
+    <actions>
+        <action id="Converter.EditorPopupAction"
+                class="de.aubli.legacychatconverter.PopUpMenuAction"
+                text="Convert to Component"
+                description="Replaces selected text with 'Replacement'.">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 
 </idea-plugin>
