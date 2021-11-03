@@ -10,7 +10,7 @@
         <action id="Converter.EditorPopupAction"
                 class="de.aubli.legacychatconverter.PopUpMenuAction"
                 text="Convert to Component"
-                description="Replaces selected text with 'Replacement'.">
+                description="Replaces selected text with the converted text.">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
