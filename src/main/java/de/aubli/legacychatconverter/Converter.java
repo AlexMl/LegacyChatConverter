@@ -50,7 +50,7 @@ public class Converter {
 
     public static String convert(String input) {
         if (input == null || input.isEmpty()) {
-            return input;
+            return "";
         }
         if (input.startsWith("ChatColor.translateAlternateColorCodes") || (input.contains("&") && !input.contains("ChatColor"))) {
             input = input.replace("ChatColor.translateAlternateColorCodes('&', ", "").replace("\"", "");

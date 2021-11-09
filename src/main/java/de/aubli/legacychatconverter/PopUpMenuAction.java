@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
 
 /**
  * @author AlexMl Created on 03.11.21 for LegacyChatConverter
@@ -34,14 +35,12 @@ public class PopUpMenuAction extends AnAction {
         if (primaryCaret.getSelectedText() == null) {
             return;
         }
-        int start = primaryCaret.getSelectionStart();
-        int end = primaryCaret.getSelectionEnd();
 
         // Replace the selection with a fixed string.
         // Must do this document change in a write action context.
-        WriteCommandAction.runWriteCommandAction(project, () -> document.replaceString(start, end, Converter.convert(primaryCaret.getSelectedText())));
-        // De-select the text range that was just replaced
-        primaryCaret.removeSelection();
+        WriteCommandAction.runWriteCommandAction(project, "Component Replace", "LegacyChatConverter",
+                replace(primaryCaret, document),
+                PsiDocumentManager.getInstance(project).getPsiFile(document));
     }
 
     /**
@@ -61,6 +60,17 @@ public class PopUpMenuAction extends AnAction {
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
         // Set visibility and enable only in case of existing project and editor and if a selection exists
         e.getPresentation().setEnabledAndVisible(project != null && editor != null && editor.getSelectionModel().hasSelection() && editor.getSelectionModel().getSelectedText().contains("\""));
+    }
+
+    private Runnable replace(Caret caret, Document document) {
+        int start = caret.getSelectionStart();
+        int end = caret.getSelectionEnd();
+
+        return () -> {
+            String newText = Converter.convert(caret.getSelectedText());
+            document.replaceString(start, end, newText);
+            caret.setSelection(start, start + newText.length());
+        };
     }
 
 }
