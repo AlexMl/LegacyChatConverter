@@ -3,6 +3,9 @@
 # LegacyChatConverter Changelog
 
 ## [Unreleased]
+
+
+## [0.1.1]
 ### Changed
 - Select converted text with cursor
 
