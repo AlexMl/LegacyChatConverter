@@ -5,22 +5,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author AlexMl Created on 30.10.21 for LegacyChatConverter
  */
 public class Converter {
 
-    private static final Map<Character, String> COLOR_CHAR_MAP = new HashMap<>();
-    private static final Map<String, String> COLOR_NAME_MAP = new HashMap<>();
+    private static final Map<Character, String> CHAR_CHATCOLOR_MAP = new HashMap<>();
+    private static final Map<Character, String> CHAR_NAMEDTEXTCOLOR_MAP = new HashMap<>();
+    private static final Map<String, String> CHATCOLOR_NAMEDTEXTCOLOR_MAP = new HashMap<>();
     private static final Map<Character, String> DECORATIONS_CHAR_MAP = new HashMap<>();
     private static final Map<String, String> DECORATIONS_NAME_MAP = new HashMap<>();
 
     static {
         for (ChatColor color : ChatColor.values()) {
             if (color.ordinal() <= ChatColor.WHITE.ordinal()) {
-                COLOR_CHAR_MAP.put(color.getChar(), "NamedTextColor." + color.name());
+                CHAR_NAMEDTEXTCOLOR_MAP.put(color.getChar(), "NamedTextColor." + color.name());
             }
-            COLOR_CHAR_MAP.put('r', "NamedTextColor.WHITE");
+            CHAR_NAMEDTEXTCOLOR_MAP.put('r', "NamedTextColor.WHITE");
+            CHAR_CHATCOLOR_MAP.put(color.getChar(), "ChatColor." + color.name());
         }
         DECORATIONS_CHAR_MAP.put('k', "TextDecoration.OBFUSCATED");
         DECORATIONS_CHAR_MAP.put('l', "TextDecoration.BOLD");
@@ -29,8 +34,8 @@ public class Converter {
         DECORATIONS_CHAR_MAP.put('o', "TextDecoration.ITALIC");
 
         for (ChatColor color : ChatColor.values()) {
-            if (COLOR_CHAR_MAP.containsKey(color.getChar())) {
-                COLOR_NAME_MAP.put("ChatColor." + color.name(), COLOR_CHAR_MAP.get(color.getChar()));
+            if (CHAR_NAMEDTEXTCOLOR_MAP.containsKey(color.getChar())) {
+                CHATCOLOR_NAMEDTEXTCOLOR_MAP.put("ChatColor." + color.name(), CHAR_NAMEDTEXTCOLOR_MAP.get(color.getChar()));
             } else if (DECORATIONS_CHAR_MAP.containsKey(color.getChar())) {
                 DECORATIONS_NAME_MAP.put("ChatColor." + color.name(), DECORATIONS_CHAR_MAP.get(color.getChar()));
             }
@@ -48,7 +53,8 @@ public class Converter {
 
     }
 
-    public static String convert(String input) {
+    @NotNull
+    public static String convert(@Nullable String input) {
         if (input == null || input.isEmpty()) {
             return "";
         }
@@ -87,7 +93,7 @@ public class Converter {
 
                 if (next != null && next.startsWith("ChatColor.")) {
                     next = next.replace(".toString()", "");
-                    String color = COLOR_NAME_MAP.containsKey(part) ? COLOR_NAME_MAP.get(part) : COLOR_NAME_MAP.get(next);
+                    String color = CHATCOLOR_NAMEDTEXTCOLOR_MAP.containsKey(part) ? CHATCOLOR_NAMEDTEXTCOLOR_MAP.get(part) : CHATCOLOR_NAMEDTEXTCOLOR_MAP.get(next);
                     String style = DECORATIONS_NAME_MAP.containsKey(part) ? DECORATIONS_NAME_MAP.get(part) : DECORATIONS_NAME_MAP.get(next);
 
                     if (color != null && style != null) {
@@ -95,7 +101,7 @@ public class Converter {
                     }
                     i++;
                 } else {
-                    String color = COLOR_NAME_MAP.get(part);
+                    String color = CHATCOLOR_NAMEDTEXTCOLOR_MAP.get(part);
                     String style = DECORATIONS_NAME_MAP.get(part);
 
                     if (color != null) {
@@ -181,7 +187,7 @@ public class Converter {
                 }
 
                 if (length > i + 3 && charArray[i + 2] == '&') {
-                    String color = COLOR_CHAR_MAP.containsKey(charArray[i + 1]) ? COLOR_CHAR_MAP.get(charArray[i + 1]) : COLOR_CHAR_MAP.get(charArray[i + 3]);
+                    String color = CHAR_NAMEDTEXTCOLOR_MAP.containsKey(charArray[i + 1]) ? CHAR_NAMEDTEXTCOLOR_MAP.get(charArray[i + 1]) : CHAR_NAMEDTEXTCOLOR_MAP.get(charArray[i + 3]);
                     String style = DECORATIONS_CHAR_MAP.containsKey(charArray[i + 1]) ? DECORATIONS_CHAR_MAP.get(charArray[i + 1]) : DECORATIONS_CHAR_MAP.get(charArray[i + 3]);
 
                     if (color != null && style != null) {
@@ -190,7 +196,7 @@ public class Converter {
                     i += 3;
                     continue;
                 } else if (length > i + 1) {
-                    String color = COLOR_CHAR_MAP.get(charArray[i + 1]);
+                    String color = CHAR_NAMEDTEXTCOLOR_MAP.get(charArray[i + 1]);
                     String style = DECORATIONS_CHAR_MAP.get(charArray[i + 1]);
 
                     if (color != null) {
@@ -211,6 +217,67 @@ public class Converter {
             }
         } else {
             result.append("\")");
+        }
+        return result.toString();
+    }
+
+    //ChatColor.translateAlternateColorCodes('&', "&a&l(!) &7You have &asuccessfully &7applied a " + cursor.getItemMeta().getDisplayName())
+    @NotNull
+    public static String convertAmpersandToChatColor(@Nullable String input) {
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+        if (input.startsWith("ChatColor.translateAlternateColorCodes")) {
+            input = input.replace("ChatColor.translateAlternateColorCodes('&', \"", "");
+            input = input.substring(0, input.length() - (input.endsWith("\"") ? 2 : 1));//last ')'
+        }
+        StringBuilder result = new StringBuilder();
+
+        char[] charArray = input.toCharArray();
+        int length = charArray.length;
+        boolean hasNextColor = false;
+        for (int i = 0; i < length; i++) {
+            char c = charArray[i];
+            if (c == '&') {
+                if (length > i + 1) {
+                    String color = CHAR_CHATCOLOR_MAP.get(charArray[i + 1]);
+                    if (color == null) {
+                        result.append("&");
+                        continue;
+                    }
+                    if (result.length() > 0) {
+                        long count = result.chars().filter(q -> q == '"').count();
+                        if (count % 2 != 0) {
+                            result.append("\" ");
+                        }
+                        result.append("+ ");
+                    }
+                    result.append(color);
+                    if (hasNextColor && (length <= i + 3 || charArray[i + 2] != '&')) {
+                        result.append(".toString()");
+                    }
+
+                    if (length > i + 3 && charArray[i + 2] == '&') {
+                        if (CHAR_CHATCOLOR_MAP.containsKey(charArray[i + 3])) {
+                            hasNextColor = true;
+                            result.append(" ");
+                        } else {
+                            result.append(" + \"");
+                        }
+                    } else {
+                        hasNextColor = false;
+                        result.append(" + \"");
+                    }
+
+                    i++;
+                    continue;
+                }
+            }
+            result.append(c);
+        }
+        long count = result.chars().filter(q -> q == '"').count();
+        if (count % 2 != 0) {
+            result.append('"');
         }
         return result.toString();
     }

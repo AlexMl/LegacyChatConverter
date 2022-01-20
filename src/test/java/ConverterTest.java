@@ -40,4 +40,31 @@ public class ConverterTest {
 
     }
 
+    @Test
+    public void testAmpersandToChatColor() {
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GRAY + \"Hello \" + ChatColor.RED + \"World!\"",
+                Converter.convertAmpersandToChatColor("&7Hello &cWorld!")
+        );
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GRAY + \"My Friends \" + ChatColor.RED + \"& \" + ChatColor.GRAY + \"I!\"",
+                Converter.convertAmpersandToChatColor("&7My Friends &c& &7I!")
+        );
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GRAY + \"Hello \" + ChatColor.RED + \"World!\"",
+                Converter.convertAmpersandToChatColor("ChatColor.translateAlternateColorCodes('&', \"&7Hello &cWorld!\")")
+        );
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GRAY + ChatColor.UNDERLINE.toString() + \"Hello \" + ChatColor.RED + ChatColor.BOLD.toString() + \"World!\"",
+                Converter.convertAmpersandToChatColor("ChatColor.translateAlternateColorCodes('&', \"&7&nHello &c&lWorld!\")")
+        );
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GREEN + ChatColor.BOLD.toString() + \"(!) \" + ChatColor.GRAY + \"You have \" + ChatColor.GREEN + \"successfully \" + ChatColor.GRAY + \"applied a \" + cursor.getItemMeta().getDisplayName()",
+                Converter.convertAmpersandToChatColor("ChatColor.translateAlternateColorCodes('&', \"&a&l(!) &7You have &asuccessfully &7applied a \" + cursor.getItemMeta().getDisplayName())"));
+
+        Assert.assertEquals("Conversion wrong",
+                "ChatColor.GRAY + \"Type a new name in chat (color code guide: \" + ChatColor.AQUA + ChatColor.UNDERLINE.toString() + \"ess.khhq.net/mc/\" + ChatColor.GRAY + \")\"",
+                Converter.convertAmpersandToChatColor("ChatColor.translateAlternateColorCodes('&', \"&7Type a new name in chat (color code guide: &b&ness.khhq.net/mc/&7)\")"));
+    }
+
 }

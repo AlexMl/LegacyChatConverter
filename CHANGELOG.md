@@ -3,7 +3,12 @@
 # LegacyChatConverter Changelog
 
 ## [Unreleased]
+### Added
+- Added support to convert Ampersand to ChatColor
 
+## [0.1.2]
+### Added
+- Compatibility with 2021.3
 
 ## [0.1.1]
 ### Changed

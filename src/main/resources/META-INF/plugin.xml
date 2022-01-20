@@ -7,9 +7,15 @@
     <depends>com.intellij.modules.platform</depends>
 
     <actions>
-        <action id="Converter.EditorPopupAction"
+        <action id="Converter.EditorPopupAction_component"
                 class="de.aubli.legacychatconverter.PopUpMenuAction"
                 text="Convert to Component"
+                description="Replaces selected text with the converted text.">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+        <action id="Converter.EditorPopupAction_chatcolor"
+                class="de.aubli.legacychatconverter.PopUpMenuAmperToChatColor"
+                text="Convert to ChatColor"
                 description="Replaces selected text with the converted text.">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
