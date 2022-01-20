@@ -3,8 +3,13 @@
 # LegacyChatConverter Changelog
 
 ## [Unreleased]
+
+## [0.2.0]
 ### Added
 - Added support to convert Ampersand to ChatColor
+
+### Changed
+- Plugin Icon Colors
 
 ## [0.1.2]
 ### Added
