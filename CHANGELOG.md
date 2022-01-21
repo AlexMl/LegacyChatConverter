@@ -3,6 +3,9 @@
 # LegacyChatConverter Changelog
 
 ## [Unreleased]
+### Fixed
+- Leading and Ending blanks
+- Missing quote if text doesn't start with &
 
 ## [0.2.0]
 ### Added
