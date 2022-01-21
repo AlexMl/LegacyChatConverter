@@ -44,13 +44,12 @@ public class Converter {
 
     //Standalone
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            System.out.println(">> " + convert(line) + "\n");
+        try (Scanner in = new Scanner(System.in)) {
+            while (in.hasNext()) {
+                String line = in.nextLine();
+                System.out.println(">> " + convert(line) + "\n");
+            }
         }
-
     }
 
     @NotNull
