@@ -58,8 +58,7 @@ public class Converter {
             return "";
         }
         if (input.startsWith("ChatColor.translateAlternateColorCodes") || (input.contains("&") && !input.contains("ChatColor"))) {
-            input = input.replace("ChatColor.translateAlternateColorCodes('&', ", "").replace("\"", "");
-            return convertAmpersand(input.substring(0, input.length() - 1));//last ')'
+            return convertAmpersand(input);
         } else {
             return convertSection(input);
         }
@@ -68,7 +67,7 @@ public class Converter {
     public static String convertSection(String input) {
         StringBuilder result = new StringBuilder("Component.text(");
 
-        String[] parts = input.split("\\+");
+        String[] parts = input.trim().split("\\+");
         int length = parts.length;
         String nextDecoration = null;
         boolean appended = false;
@@ -166,6 +165,14 @@ public class Converter {
     public static String convertAmpersand(String input) {
         StringBuilder result = new StringBuilder("Component.text(\"");
 
+        if (input.trim().startsWith("\"")) {
+            input = input.trim();
+        }
+        if (input.trim().startsWith("ChatColor.translateAlternateColorCodes")) {
+            input = input.trim().replace("ChatColor.translateAlternateColorCodes('&', ", "").replace("\"", "");
+            input = input.substring(0, input.length() - 1);//last ')'
+        }
+
         char[] charArray = input.toCharArray();
         int length = charArray.length;
         String nextDecoration = null;
@@ -226,6 +233,7 @@ public class Converter {
         if (input == null || input.isEmpty()) {
             return "";
         }
+        input = input.trim();
         if (input.startsWith("ChatColor.translateAlternateColorCodes")) {
             input = input.replace("ChatColor.translateAlternateColorCodes('&', \"", "");
             input = input.substring(0, input.length() - (input.endsWith("\"") ? 2 : 1));//last ')'
@@ -271,6 +279,9 @@ public class Converter {
                     i++;
                     continue;
                 }
+            }
+            if (i == 0) {
+                result.append('"');
             }
             result.append(c);
         }
