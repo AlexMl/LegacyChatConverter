@@ -1,6 +1,6 @@
 # LegacyChatConverter
 
-[![Build](https://github.com/MineHeroes/LegacyChatConverterPlugin/actions/workflows/build.yml/badge.svg)](https://github.com/MineHeroes/LegacyChatConverterPlugin/actions/workflows/build.yml)
+[![Build](https://github.com/AlexMl/LegacyChatConverterPlugin/actions/workflows/build.yml/badge.svg)](https://github.com/AlexMl/LegacyChatConverterPlugin/actions/workflows/build.yml)
 
 <!-- Plugin description -->
 This Fancy IntelliJ Platform Plugin will help you convert legacy chat, like
@@ -18,7 +18,7 @@ Just select the message, right click and select <i>Convert to Component</i>.
 
 - Manually:
 
-  Download the [latest release](https://github.com/MineHeroes/LegacyChatConverterPlugin/releases/latest) and install it
+  Download the [latest release](https://github.com/AlexMl/LegacyChatConverterPlugin/releases/latest) and install it
   manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
