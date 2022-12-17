@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 ### Added
+- Compatibility with 2022.3 and newer
+
+## [0.2.3]
+### Added
 - Compatibility with 2022.2
 
 ## [0.2.2]
